@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import  type { TimerMode, TimerStatus } from '../types';
+import type { TimerMode, TimerStatus } from '../types';
 
 // Definiamo i tempi in secondi per facilitare i calcoli
 const FOCUS_TIME = 25 * 60;
@@ -19,15 +19,24 @@ export const usePomodoro = () => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
     } 
-    // Se il tempo scade, fermiamo il timer (qui poi gestiremo il passaggio focus -> pausa)
+    // Se il tempo scade, gestiamo il cambio di ciclo
     else if (timeLeft === 0) {
-      setStatus('idle');
-      // TODO: Gestire il cambio di modalità e i suoni
+      if (mode === 'focus') {
+        // Finito il lavoro -> Passiamo alla pausa breve
+        setMode('shortBreak');
+        setTimeLeft(SHORT_BREAK_TIME);
+        setStatus('idle'); // Ci fermiamo in attesa che l'utente avvii la pausa
+      } else {
+        // Finita la pausa -> Si torna al lavoro
+        setMode('focus');
+        setTimeLeft(FOCUS_TIME);
+        setStatus('idle');
+      }
     }
 
     // Cleanup: puliamo l'intervallo per evitare memory leaks
     return () => clearInterval(interval);
-  }, [status, timeLeft]);
+  }, [status, timeLeft, mode]); // Aggiunto 'mode' alle dipendenze per sicurezza
 
   // --- AZIONI DEL TIMER ---
   const startTimer = () => setStatus('running');

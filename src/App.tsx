@@ -8,6 +8,7 @@ function App() {
     formattedTime, 
     progress, 
     status, 
+    mode,
     startTimer, 
     pauseTimer, 
     resetTimer 
@@ -32,11 +33,13 @@ function App() {
       <div className="controls">
         {status !== 'running' ? (
           <button className="btn btn-primary" onClick={startTimer}>
-            {status === 'paused' ? 'Riprendi' : 'Inizia Focus'}
+            {status === 'paused' 
+              ? 'Riprendi' 
+              : mode === 'focus' ? 'Inizia Focus' : 'Inizia Pausa'}
           </button>
         ) : (
           <button className="btn btn-warning" onClick={pauseTimer}>
-            Pausa
+            Sospendi
           </button>
         )}
         <button className="btn btn-danger" onClick={resetTimer}>
