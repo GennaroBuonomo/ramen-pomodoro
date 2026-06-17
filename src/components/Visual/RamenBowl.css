@@ -3,37 +3,73 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 300px;
+  height: 250px;
   margin: 2rem 0;
 }
 
-.bowl {
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  background-color: #fcefd6; /* Colore di un brodo leggero */
-  border: 8px solid #d32f2f; /* Bordo rosso della ciotola */
+/* Il palcoscenico dove avviene l'animazione */
+.ramen-stage {
   position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  width: 250px;
+  height: 200px;
 }
 
+/* Base per tutti gli SVG */
+.asset {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* Posizionamento della ciotola */
+.bowl-asset {
+  bottom: 0;
+  z-index: 10;
+}
+
+/* Setup iniziale degli ingredienti (nascosti e spostati in alto) */
 .ingredient {
   opacity: 0;
-  transform: translateY(-20px);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #333;
-  margin: 5px 0;
+  transform: translateY(-50px) scale(0.8);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); /* Effetto rimbalzo elastico */
 }
 
-/* La classe che fa apparire magicamente gli ingredienti */
+/* Posizionamenti specifici per farli sembrare impiantati nel brodo */
+.noodles {
+  bottom: 10px;
+  left: 0;
+  width: 150px;
+  height: 75px;
+  margin-left: 50px;
+  z-index: 11;
+}
+
+.egg {
+  bottom: 40px;
+  right: 40px;
+  width: 70px;
+  height: 50px;
+  z-index: 12;
+}
+
+.chashu {
+  bottom: 30px;
+  left: 30px;
+  width: 90px;
+  height: 60px;
+  z-index: 13;
+}
+
+.scallions {
+  bottom: 60px;
+  left: 100px;
+  width: 60px;
+  height: 60px;
+  z-index: 14;
+}
+
+/* Classe attivata da React per far cadere l'ingrediente */
 .ingredient.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }

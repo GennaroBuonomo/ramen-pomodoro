@@ -1,12 +1,12 @@
 import './RamenBowl.css';
+// 1. Importiamo i nostri nuovi disegni SVG
+import { BowlSVG, NoodlesSVG, EggSVG, ChashuSVG, ScallionSVG } from './RamenAssets';
 
-// Definiamo cosa si aspetta di ricevere questo componente
 interface RamenBowlProps {
-  progress: number; // Un numero da 0 a 100
+  progress: number;
 }
 
 export const RamenBowl = ({ progress }: RamenBowlProps) => {
-  // Calcoliamo quali ingredienti mostrare in base alla percentuale
   const showNoodles = progress >= 25;
   const showEgg = progress >= 50;
   const showChashu = progress >= 75;
@@ -14,26 +14,31 @@ export const RamenBowl = ({ progress }: RamenBowlProps) => {
 
   return (
     <div className="ramen-container">
-      {/* La ciotola di base con il brodo è sempre visibile */}
-      <div className="bowl base-bowl">
-        {/* Usiamo dei div temporanei per simulare gli ingredienti. 
-            Più avanti li sostituiremo con dei veri SVG o immagini */}
-            
-        <div className={`ingredient noodles ${showNoodles ? 'visible' : ''}`}>
-          🍜 Noodles
+      {/* 2. Usiamo ramen-stage come "palcoscenico" per impilare le immagini */}
+      <div className="ramen-stage">
+        
+        {/* La ciotola di base */}
+        <div className="asset bowl-asset">
+          <BowlSVG />
+        </div>
+
+        {/* 3. Sostituiamo i testi con i veri componenti SVG */}
+        <div className={`asset ingredient noodles ${showNoodles ? 'visible' : ''}`}>
+          <NoodlesSVG />
         </div>
         
-        <div className={`ingredient egg ${showEgg ? 'visible' : ''}`}>
-          🥚 Uovo
+        <div className={`asset ingredient egg ${showEgg ? 'visible' : ''}`}>
+          <EggSVG />
         </div>
         
-        <div className={`ingredient chashu ${showChashu ? 'visible' : ''}`}>
-          🥩 Maiale Chashu
+        <div className={`asset ingredient chashu ${showChashu ? 'visible' : ''}`}>
+          <ChashuSVG />
         </div>
         
-        <div className={`ingredient scallions ${showScallions ? 'visible' : ''}`}>
-          🌿 Cipollotto
+        <div className={`asset ingredient scallions ${showScallions ? 'visible' : ''}`}>
+          <ScallionSVG />
         </div>
+
       </div>
     </div>
   );

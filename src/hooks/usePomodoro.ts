@@ -58,6 +58,16 @@ export const usePomodoro = () => {
   const seconds = (timeLeft % 60).toString().padStart(2, '0');
   const formattedTime = `${minutes}:${seconds}`;
 
+  // --- AGGIORNAMENTO TITOLO TAB BROWSER ---
+  useEffect(() => {
+    // Se il timer sta girando o è in pausa, mostriamo il tempo. Altrimenti il titolo standard.
+    if (status !== 'idle') {
+      document.title = `${formattedTime} - Ramen Pomodoro`;
+    } else {
+      document.title = 'Ramen Pomodoro 🍜';
+    }
+  }, [formattedTime, status]);
+
   return {
     timeLeft,
     formattedTime,
