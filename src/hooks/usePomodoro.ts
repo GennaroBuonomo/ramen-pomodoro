@@ -19,5 +19,14 @@ export const usePomodoro = () => {
         setTimeLeft((prevTime) => prevTime - 1)
       }, 1000);
     }
-  })
+    // Se il tempo scade, fermiamo il timer (qui poi gestiremo il passaggio focus -> pausa)
+    else if (timeLeft === 0) {
+      setStatus('idle');
+      // TODO: Gestire il cambio di modalità e i suoni
+    }
+
+    // Cleanup: puliamo l'intervallo per evitare memory leaks
+    return () => clearInterval(intervall);
+  }, [status, timerLeft]);
+  
 }
