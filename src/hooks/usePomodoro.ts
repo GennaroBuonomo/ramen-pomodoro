@@ -1,9 +1,44 @@
 import { useState, useEffect } from 'react';
 import type { TimerMode, TimerStatus } from '../types';
 
-// Definiamo i tempi in secondi per facilitare i calcoli
-const FOCUS_TIME = 25 * 60;
+const FOCUS_TIME = 3; // <-- 3 secondi per test
 const SHORT_BREAK_TIME = 5 * 60;
+
+// --- MAGIA AUDIO JAVASCRIPT ---
+// Niente più file MP3 o link esterni. Generiamo il suono direttamente nel browser!
+let audioCtx: AudioContext | null = null;
+
+// Funzione per aggirare il blocco del browser inizializzando l'audio al click
+const unlockAudio = () => {
+  if (!audioCtx) {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    audioCtx = new AudioContextClass();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+};
+
+// Funzione che "suona" un rintocco morbido
+const playDing = () => {
+  if (!audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.type = 'sine'; // Crea un'onda sonora morbida (tipo campana)
+  osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Nota "La"
+
+  // Effetto "Fade Out": il volume parte a 0.5 e sfuma a 0 in 1 secondo
+  gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
+
+  osc.start(audioCtx.currentTime);
+  osc.stop(audioCtx.currentTime + 1);
+};
+// -----------------------------
 
 export const usePomodoro = () => {
   const [timeLeft, setTimeLeft] = useState(FOCUS_TIME);
@@ -13,33 +48,36 @@ export const usePomodoro = () => {
   useEffect(() => {
     let interval: number | undefined;
 
-    // Se il timer è in esecuzione e c'è ancora tempo, decurta 1 secondo
     if (status === 'running' && timeLeft > 0) {
       interval = window.setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
     } 
-    // Se il tempo scade, gestiamo il cambio di ciclo
     else if (timeLeft === 0) {
+      // 1. Facciamo suonare il nostro campanello digitale!
+      playDing();
+
       if (mode === 'focus') {
-        // Finito il lavoro -> Passiamo alla pausa breve
         setMode('shortBreak');
         setTimeLeft(SHORT_BREAK_TIME);
-        setStatus('idle'); // Ci fermiamo in attesa che l'utente avvii la pausa
+        setStatus('idle');
       } else {
-        // Finita la pausa -> Si torna al lavoro
         setMode('focus');
         setTimeLeft(FOCUS_TIME);
         setStatus('idle');
       }
     }
 
-    // Cleanup: puliamo l'intervallo per evitare memory leaks
     return () => clearInterval(interval);
-  }, [status, timeLeft, mode]); // Aggiunto 'mode' alle dipendenze per sicurezza
+  }, [status, timeLeft, mode]);
 
   // --- AZIONI DEL TIMER ---
-  const startTimer = () => setStatus('running');
+  const startTimer = () => {
+    // 2. Sblocchiamo il motore audio nel momento in cui l'utente clicca "Inizia"
+    unlockAudio();
+    setStatus('running');
+  };
+  
   const pauseTimer = () => setStatus('paused');
   
   const resetTimer = () => {
@@ -48,19 +86,15 @@ export const usePomodoro = () => {
     setTimeLeft(FOCUS_TIME);
   };
 
-  // --- CALCOLI PER LA UI ---
-  // Calcoliamo la percentuale (da 0 a 100) per capire quando far cadere gli ingredienti
   const totalTime = mode === 'focus' ? FOCUS_TIME : SHORT_BREAK_TIME;
   const progress = ((totalTime - timeLeft) / totalTime) * 100;
 
-  // Formattazione per mostrare i minuti (es. 25:00)
   const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
   const seconds = (timeLeft % 60).toString().padStart(2, '0');
   const formattedTime = `${minutes}:${seconds}`;
 
   // --- AGGIORNAMENTO TITOLO TAB BROWSER ---
   useEffect(() => {
-    // Se il timer sta girando o è in pausa, mostriamo il tempo. Altrimenti il titolo standard.
     if (status !== 'idle') {
       document.title = `${formattedTime} - Ramen Pomodoro`;
     } else {

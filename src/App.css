@@ -1,42 +1,78 @@
+/* Importiamo un font moderno e pulito da Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+
 .app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
-  background-color: #fafafa;
-  color: #333;
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: #fdfaf6; /* Colore morbido stile carta di riso */
+  color: #2c3e50;
   text-align: center;
+  /* Aggiungiamo un leggero pattern a pois per dare texture allo sfondo */
+  background-image: radial-gradient(#e2d9c8 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+header h1 {
+  font-size: 3rem;
+  color: #d32f2f; /* Rosso profondo elegante */
+  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+header p {
+  color: #7f8c8d;
+  font-size: 1.2rem;
+  margin-top: 0;
+  font-weight: 400;
 }
 
 .timer-display {
-  font-size: 4rem;
-  font-weight: bold;
+  font-size: 6rem;
+  font-weight: 700;
   margin: 1rem 0;
-  font-variant-numeric: tabular-nums; /* Evita che i numeri "ballino" mentre scorrono */
+  color: #2c3e50;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.08);
 }
 
 .controls {
   display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: 1.5rem;
+  margin-top: 3rem;
 }
 
+/* Stile base per bottoni premium */
 .btn {
-  padding: 0.8rem 1.5rem;
+  padding: 1rem 2.5rem;
   font-size: 1.1rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px; /* Forma a pillola molto moderna */
   cursor: pointer;
   font-weight: bold;
-  transition: opacity 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
+/* Animazione di sollevamento al passaggio del mouse */
 .btn:hover {
-  opacity: 0.8;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.15);
 }
 
-.btn-primary { background-color: #4CAF50; color: white; }
-.btn-warning { background-color: #FFC107; color: black; }
-.btn-danger { background-color: #F44336; color: white; }
+/* Effetto pressione del bottone */
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Colori specifici */
+.btn-primary { background-color: #d32f2f; color: white; }
+.btn-warning { background-color: #f39c12; color: white; }
+.btn-danger { background-color: #e74c3c; color: white; }
