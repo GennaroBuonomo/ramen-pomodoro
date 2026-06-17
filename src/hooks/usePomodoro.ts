@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TimerMode, TimerStatus } from '../types';
+import  type { TimerMode, TimerStatus } from '../types';
 
 // Definiamo i tempi in secondi per facilitare i calcoli
 const FOCUS_TIME = 25 * 60;

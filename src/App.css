@@ -1,0 +1,42 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #fafafa;
+  color: #333;
+  text-align: center;
+}
+
+.timer-display {
+  font-size: 4rem;
+  font-weight: bold;
+  margin: 1rem 0;
+  font-variant-numeric: tabular-nums; /* Evita che i numeri "ballino" mentre scorrono */
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: opacity 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+.btn-primary { background-color: #4CAF50; color: white; }
+.btn-warning { background-color: #FFC107; color: black; }
+.btn-danger { background-color: #F44336; color: white; }
