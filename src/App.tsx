@@ -3,12 +3,13 @@ import { RamenBowl } from './components/Visual/RamenBowl';
 import './App.css'; 
 
 function App() {
-  // 1. Estraiamo tutto ciò che ci serve dal nostro Hook
   const { 
     formattedTime, 
     progress, 
     status, 
     mode,
+    completedBowls,
+    changeDuration,
     startTimer, 
     pauseTimer, 
     resetTimer 
@@ -20,16 +21,31 @@ function App() {
         <h1>🍜 Ramen Pomodoro</h1>
         <p>Concentrati e riempi la ciotola</p>
       </header>
+
+      {/* NUOVO: Statistiche del giorno */}
+      <div className="stats-badge">
+        Ramen serviti oggi: <strong>{completedBowls}</strong>
+      </div>
       
-      {/* 2. Il display numerico del tempo */}
       <div className="timer-display">
         {formattedTime}
       </div>
 
-      {/* 3. Il nostro componente visivo a cui passiamo la percentuale */}
+      {/* Selettori del tempo (visibili solo quando il timer è fermo in modalità focus) */}
+      {status === 'idle' && mode === 'focus' && (
+        <div className="duration-selector">
+
+          {/* PULSANTE DI TEST (0.05 minuti = 3 secondi) */}
+          <button className="btn-time" onClick={() => changeDuration(0.20)}>Test (12s)</button>
+
+          <button className="btn-time" onClick={() => changeDuration(15)}>15 min</button>
+          <button className="btn-time" onClick={() => changeDuration(25)}>25 min</button>
+          <button className="btn-time" onClick={() => changeDuration(45)}>45 min</button>
+        </div>
+      )}
+
       <RamenBowl progress={progress} />
 
-      {/* 4. I pulsanti per controllare il timer */}
       <div className="controls">
         {status !== 'running' ? (
           <button className="btn btn-primary" onClick={startTimer}>
